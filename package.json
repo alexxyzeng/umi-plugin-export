@@ -1,0 +1,38 @@
+{
+  "name": "umi-plugin-export",
+  "version": "0.0.1",
+  "description": "generate exportation automatically",
+  "authors": {
+    "name": "alexzeng",
+    "email": "xiayao.zeng@gmail.com"
+  },
+  "repository": "/umi-plugin-export",
+  "peerDependencies": {
+    "umi": "2.x || ^2.9.0-0"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "cross-env APP_ROOT=example umi dev",
+    "build": "father-build",
+    "prepublishOnly": "npm run build && np --no-cleanup --yolo --no-publish"
+  },
+  "devDependencies": {
+    "@types/eslint": "^7.2.0",
+    "cross-env": "^6.0.3",
+    "eslint": "^7.4.0",
+    "eslint-plugin-react": "^7.20.3",
+    "father-build": "^1.8.0",
+    "np": "^5.0.3",
+    "umi": "^2.9.0",
+    "umi-types": ">= 0.4.0-beta.4"
+  },
+  "files": [
+    "lib",
+    "src",
+    "ui"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^3.4.0"
+  }
+}
