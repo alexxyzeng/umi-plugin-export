@@ -1,6 +1,6 @@
 import React from 'react'
-function CompA() {
+function CompC() {
   return <div>Comp B</div>
 }
 
-export default CompA
+export default CompC
