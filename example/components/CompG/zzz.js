@@ -15,3 +15,4 @@ export {
   Hero,
   Beast
 }
+

@@ -1,4 +1,7 @@
 import CompF from './ComF.js'
+import {
+  Beauty 
+} from './ComF.js'
 import CompA from './CompA/index.js'
 import CompB from './CompB/index.js'
 import CompC from './CompC/index.js'
@@ -12,6 +15,7 @@ import {
 
 export {
   CompF,
+  Beauty,
   CompA,
   CompB,
   CompC,

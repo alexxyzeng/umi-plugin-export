@@ -4,3 +4,12 @@ function CompF() {
 }
 
 export default CompF
+
+export function Beauty() {
+  return <div>Beauty</div>
+}
+
+// no export
+export function Belle() {
+  return <div>Beauty</div>
+}
