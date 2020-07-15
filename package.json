@@ -33,6 +33,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "chokidar": "^3.4.0"
+    "chokidar": "^3.4.0",
+    "js-export-generator": "^1.0.2"
   }
 }
