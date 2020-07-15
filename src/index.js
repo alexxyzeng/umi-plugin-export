@@ -1,4 +1,3 @@
-
 const chokidar = require('chokidar')
 const log = console.log
 const process = require('process')
@@ -7,31 +6,27 @@ const { throttle } = require('./throttle')
 const childProcess = require('child_process')
 
 const defaultOptions = {
-  match: /\/(components|enum|service|utils|helpers)/,
+  match: /(components|enum|service|utils|helpers)/,
   outputPath: 'index.js'
 }
 
 let pathsToParse = {}
 
-function generateExport(outputPath, watcher) {
+function generateExport(outputPath, api) {
+  api.log.pending('Pending parsing export')
   const paths = Object.keys(pathsToParse)
-  console.log(paths, '---- paths')
-  watcher.close()
-  try {
-    paths.forEach(dirPath => {
-      const finalPath = path.resolve(dirPath, outputPath)
-      console.log(dirPath, '---- final path ---', outputPath, finalPath)
-      childProcess.execSync('npx generate-export', [dirPath, outputPath])
-    })
-  } catch (err) {
-    // console.log(err, '---- err')
-  }
+  // watcher.close()
+  paths.forEach(dirPath => {
+    childProcess.execSync(`generate-export ${dirPath} ${outputPath}`, { cwd: dirPath })
+  })
+  api.log.success('Successfully generated')
 }
 
-const debouncedGenerateExport = throttle(generateExport, 200)
+const debouncedGenerateExport = throttle(generateExport, 2000)
 
 
-function parseExport(targetPath = '', type, matchPattern, outputPath, watcher) {
+function parseExport(targetPath = '', type, matchPattern, outputPath, api) {
+
   const match = targetPath.match(matchPattern)
   if (!match) {
     return
@@ -39,28 +34,27 @@ function parseExport(targetPath = '', type, matchPattern, outputPath, watcher) {
   const matchedPath = match[0]
   const index = match.index
 
-  // const dirPath = process.cwd() + '/' + path.slice(0, index + matchedPath.length)
   const dirPath = path.resolve(process.cwd(), targetPath.slice(0, index + matchedPath.length))
   if (!pathsToParse[dirPath]) {
     pathsToParse[dirPath] = 1
   }
-  // TODO: 解析生成对应的index.js
-  debouncedGenerateExport(outputPath, watcher)
+  debouncedGenerateExport(outputPath, api)
 }
 
 export default function (api, options) {
   const { match, outputPath } = { ...defaultOptions, ...options }
   const watcher = chokidar.watch('.', {
-    ignored: /(node_modules|.git|.umi|package.json|.umirc|test|jest|__test__|.prettier|.fatherrc|yarn|npm|.DS_Store|.editorconfig|.md)/, // ignore dotfiles
+    ignored: /(node_modules|.git|.umi|package.json|.umirc|test|jest|__test__|.prettier|.fatherrc|yarn|npm|.DS_Store|.editorconfig|.md|(\/(components|utils|helpers|enums)\/index.js))/g, // ignore dotfiles
     persistent: true
   });
   api.onStart(() => {
     watcher
-      .on('add', path => parseExport(path, 'add', match, outputPath, watcher))
-      .on('change', path => parseExport(path, 'change', match, outputPath, watcher))
-      .on('unlink', path => parseExport(path, 'remove', match, outputPath, watcher));
+      .on('add', path => parseExport(path, 'add', match, outputPath, api))
+      .on('change', path => parseExport(path, 'change', match, outputPath, api))
+      .on('unlink', path => parseExport(path, 'remove', match, outputPath, api));
   })
   api.onExit(() => {
     watcher.close().then(() => console.log('closed'));
   })
 }
+
