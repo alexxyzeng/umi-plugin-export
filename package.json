@@ -1,6 +1,6 @@
 {
   "name": "umi-plugin-export",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "generate exportation automatically",
   "authors": {
     "name": "alexzeng",
@@ -34,6 +34,6 @@
   "license": "MIT",
   "dependencies": {
     "chokidar": "^3.4.0",
-    "js-export-generator": "^1.0.2"
+    "js-export-generator": "^1.1.1"
   }
 }
