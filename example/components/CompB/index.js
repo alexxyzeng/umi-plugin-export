@@ -1,6 +1,6 @@
-import React from 'react'
-function CompB() {
-  return <div>Comp B</div>
+import React from 'react';
+function CompBB() {
+  return <div>Comp B</div>;
 }
 
-export default CompB
+export default CompBB;

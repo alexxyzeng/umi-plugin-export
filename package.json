@@ -34,6 +34,6 @@
   "license": "MIT",
   "dependencies": {
     "chokidar": "^3.4.0",
-    "js-export-generator": "^1.1.1"
+    "js-export-generator": "^1.1.2"
   }
 }

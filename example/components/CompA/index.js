@@ -1,6 +1,11 @@
-import React from 'react'
-function CompA() {
-  return <div>Comp B</div>
-}
+import {
+  A,
+  B,
+  CCC 
+} from './components/index.js'
 
-export default CompA
+export {
+  A,
+  B,
+  CCC 
+}

@@ -1,18 +1,14 @@
-import React from 'react'
+import React from 'react';
 export default function GGG() {
-  return <div>Comp B</div>
+  return <div>Comp B</div>;
 }
 
-function Hero() {
-  return <div>Comp B</div>
+function Color() {
+  return <div>Comp a</div>;
 }
 
-function Beast() {
-  return <div>Beast</div>
+function Alex() {
+  return <div>Beast</div>;
 }
 
-export {
-  Hero,
-  Beast
-}
-
+export { Color, Alex };
