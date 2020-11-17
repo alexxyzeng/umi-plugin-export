@@ -7,6 +7,7 @@ const childProcess = require('child_process');
 
 const defaultOptions = {
   match: /(components|enum|service|utils|helpers)/g,
+  ignored: /(node_modules|.git|.umi|package.json|.umirc|test|jest|__test__|.prettier|.fatherrc|yarn|npm|.DS_Store|.editorconfig|.md|(\/(components|utils|helpers|enums)\/index.js))/g,
   outputPath: 'index.js',
 };
 
@@ -20,14 +21,14 @@ function generateExport(type, matchPattern, outputPath, api) {
     childProcess.execSync(`generate-export ${fullPath} ${outputPath}`, {
       cwd: dirPath,
     });
-    const pathList = fullPath.split('/');
-    const parentPath = pathList.slice(0, pathList.length - 1).join('/');
-    if (!parentPath.match(matchPattern)) {
-      return;
-    }
-    childProcess.execSync(`generate-export ${parentPath} ${outputPath}`, {
-      cwd: dirPath,
-    });
+    // const pathList = fullPath.split('/');
+    // const parentPath = pathList.slice(0, pathList.length - 1).join('/');
+    // if (!parentPath.match(matchPattern)) {
+    //   return;
+    // }
+    // childProcess.execSync(`generate-export ${parentPath} ${outputPath}`, {
+    //   cwd: dirPath,
+    // });
   });
   api.log.success('Successfully generated');
 }
@@ -48,7 +49,7 @@ function parseExport(targetPath = '', type, matchPattern, outputPath, api) {
   const pathList = targetPath.split('/');
   const fileName = pathList[pathList.length - 1];
   const fileLevel =
-    fileName === 'index.js' ? pathList.length - 2 : pathList.length - 1;
+    fileName === outputPath ? pathList.length - 2 : pathList.length - 1;
   const dirPath = pathList.slice(0, fileLevel).join('/');
   if (!pathsToParse[dirPath]) {
     pathsToParse[dirPath] = 1;
@@ -57,9 +58,9 @@ function parseExport(targetPath = '', type, matchPattern, outputPath, api) {
 }
 
 export default function(api, options) {
-  const { match, outputPath } = { ...defaultOptions, ...options };
+  const { match, outputPath, ignored } = { ...defaultOptions, ...options };
   const watcher = chokidar.watch('.', {
-    ignored: /(node_modules|.git|.umi|package.json|.umirc|test|jest|__test__|.prettier|.fatherrc|yarn|npm|.DS_Store|.editorconfig|.md|(\/(components|utils|helpers|enums)\/index.js))/g, // ignore dotfiles
+    ignored,
     persistent: true,
   });
   api.onStart(() => {
