@@ -16,6 +16,9 @@ let pathsToParse = {};
 function generateExport(type, matchPattern, outputPath, api) {
   api.log.pending('Pending parsing export');
   const paths = Object.keys(pathsToParse);
+  if (!Array.isArray(paths)) {
+    return;
+  }
   paths.forEach(dirPath => {
     const fullPath = path.resolve(process.cwd(), dirPath);
     childProcess.execSync(`generate-export ${fullPath} ${outputPath}`, {
