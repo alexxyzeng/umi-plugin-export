@@ -7,7 +7,7 @@ const childProcess = require('child_process');
 
 const defaultOptions = {
   match: /(components|enum|service|utils|helpers)/g,
-  ignored: /(node_modules|.git|.umi|package.json|.umirc|test|jest|__test__|.prettier|.fatherrc|yarn|npm|.DS_Store|.editorconfig|.md|(\/(components|utils|helpers|enums)\/index.js))/g,
+  ignored: /(dist|node_modules|.git|.umi|package.json|.umirc|test|jest|__test__|.prettier|.fatherrc|yarn|npm|.DS_Store|.editorconfig|.md|(\/(components|utils|helpers|enums)\/index.js))/g,
   outputPath: 'index.js',
 };
 
@@ -66,13 +66,17 @@ export default function(api, options) {
     ignored,
     persistent: true,
   });
-  api.onStart(() => {
-    watcher
-      // .on('add', path => parseExport(path, 'add', match, outputPath, api))
-      .on('change', path => parseExport(path, 'change', match, outputPath, api))
-      .on('unlink', path =>
-        parseExport(path, 'remove', match, outputPath, api),
-      );
+  api.onDevCompileDone(({ isFirstCompile }) => {
+    if (isFirstCompile) {
+      watcher
+        // .on('add', path => parseExport(path, 'add', match, outputPath, api))
+        .on('change', path =>
+          parseExport(path, 'change', match, outputPath, api),
+        )
+        .on('unlink', path =>
+          parseExport(path, 'remove', match, outputPath, api),
+        );
+    }
   });
   api.onExit(() => {
     watcher.close().then(() => console.log('closed'));

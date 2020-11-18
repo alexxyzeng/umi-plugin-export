@@ -1,5 +1,5 @@
-function CompAA() {
+function CompA() {
   return null;
 }
 
-export default CompAA;
+export default CompA;
